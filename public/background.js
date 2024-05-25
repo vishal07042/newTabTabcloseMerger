@@ -7113,6 +7113,8 @@ setInterval(() => {
 }, 1000);
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	console.log(request);
+
 	if (request.message === "getRandomQuestion") {
 		const randomQuestion = constque;
 		const randomQuestion2 = constque2;
@@ -7121,22 +7123,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	}
 });
 
+// iske upar wala sara code questions ka tha
 
-
+// let startingPoint = 2;  //--	 chala gaya content js mein
 
 // let startingPoint = 2;  //--	 chala gaya content js mein
 
 chrome.runtime.onInstalled.addListener(async () => {
 	console.log("extension installed ");
 
-	let startingPoint = await getleetcode();
+	let startingPoint = await getleetcode().then(() => {
+		console.log("api call hui");
+	});
 
 	await chrome.storage.local.set(
 		{ startingPoint: startingPoint },
 		function () {
 			console.log("starting point ki value set ho gayi");
 			getFirstvalue();
-			
 		}
 	);
 
@@ -7147,7 +7151,8 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.runtime.onMessage.addListener(async function (
 	message,
-	
+	sender,
+	sendResponse
 ) {
 	console.log(message);
 	console.log("message received from popup");
@@ -7191,6 +7196,7 @@ async function getFirstvalue() {
 getFirstvalue();
 
 async function getleetcode() {
+	console.log("api call hui");
 	try {
 		const apiEndpoint =
 			"https://leetcode-api-faisalshohag.vercel.app/professionalprovishal";
@@ -7222,7 +7228,10 @@ chrome.tabs.onUpdated.addListener(function (activeInfo) {
 				activeTab.id,
 				{ message: totalSolved, message2: gettingStarted },
 				function (response) {
-					console.log("isse fn me tab clsoe karna hai", response.message);
+					console.log(
+						"isse fn me tab clsoe karna hai",
+						response.message
+					);
 
 					if (response.message === "close tab") {
 						chrome.tabs.query(
@@ -7250,21 +7259,3 @@ async function keepAlive() {
 		return;
 	}
 }
-
-
-
-
-// function updateValue(){
-
-// 	setInterval(async () => {
-// 		await chrome.storage.local.set(
-// 			{ startingPoint: startingPoint + 1 },
-// 			() => {
-// 				console.log("value set");
-// 			}
-// 		);
-// 	}, 2000);
-	
-// }
-
-// updateValue();

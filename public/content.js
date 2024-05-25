@@ -22,7 +22,7 @@ chrome.runtime.onMessage.addListener(async function (
 			location.hostname != "chatgpt.com" &&
 			location.hostname != "www.codehelp.in" &&
 			location.hostname != "learn.codehelp.in" &&
-			location.hostname != "www.google.com" &&
+			// location.hostname != "www.google.com" &&
 			location.hostname != "takeuforward.org" &&
 			location.hostname != "www.geeksforgeeks.org"
 		) {
