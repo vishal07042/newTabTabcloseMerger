@@ -7112,8 +7112,27 @@ setInterval(() => {
 	constque3 = queLydia[Math.floor(Math.random() * queLydia.length)];
 }, 1000);
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async(request, sender, sendResponse) => {
 	console.log(request);
+
+
+	if (request.selectedWebsites) {
+		console.log("message received 3 from option page");
+		console.log(request.selectedWebsites);
+
+		sendResponse(request.selectedWebsites);
+		console.log("yeh chal gaya toh kam ho gaya")
+		console.log("send respone send");
+
+		await chrome.storage.local.set(
+			{ selectedWebsites: request.selectedWebsites },
+			function () {
+				console.log("selected websites set");
+			}
+		);
+
+		getSelectedWebsite();
+	}
 
 	if (request.message === "getRandomQuestion") {
 		const randomQuestion = constque;
@@ -7154,8 +7173,8 @@ chrome.runtime.onMessage.addListener(async function (
 	sender,
 	sendResponse
 ) {
-	console.log(message);
-	console.log("message received from popup");
+
+	
 
 	if (message.startingValueadd) {
 		console.log("in to if condition");
@@ -7212,6 +7231,18 @@ async function getleetcode() {
 	}
 }
 
+async function getSelectedWebsite(){ 
+
+	let bs = await chrome.storage.local.get(["selectedWebsites"]).then((result) => {
+	 console.log("selected websites are ",result.selectedWebsites)
+	 return result.selectedWebsites;
+ });
+
+ return bs;
+
+ 
+}
+
 chrome.tabs.onUpdated.addListener(function (activeInfo) {
 	console.log("tab activated");
 
@@ -7226,7 +7257,7 @@ chrome.tabs.onUpdated.addListener(function (activeInfo) {
 			let activeTab = tabs[0];
 			await chrome.tabs.sendMessage(
 				activeTab.id,
-				{ message: totalSolved, message2: gettingStarted },
+				{ message: totalSolved, message2: gettingStarted, message3: await getSelectedWebsite() },
 				function (response) {
 					console.log(
 						"isse fn me tab clsoe karna hai",
@@ -7259,3 +7290,5 @@ async function keepAlive() {
 		return;
 	}
 }
+
+

@@ -1,20 +1,33 @@
 console.log(" hello from content.js");
 
+
+
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener(async function (
 	request,
 	sender,
 	sendResponse
 ) {
+
+	console.log(request	)
+
+	
+
+
+
 	if (request.message) {
 		console.log("Total problems solved: " + request.message);
 		console.log("Starting point is set to: " + request.message2);
-		console.log("hui execute");
+		
 
 		let totalSolved = request.message;
 
 		let startingPoint = await request.message2;
-		console.log("hui execute");
+
+
+		let selectedWebsites = await request.message3;
+		console.log("selected websites are ",selectedWebsites)
+		
 		console.log(" type of starting point ", typeof startingPoint);
 
 		if (
