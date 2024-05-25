@@ -7242,7 +7242,6 @@ async function getSelectedWebsite(){
 
  
 }
-
 chrome.tabs.onUpdated.addListener(function (activeInfo) {
 	console.log("tab activated");
 

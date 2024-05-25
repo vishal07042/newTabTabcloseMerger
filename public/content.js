@@ -26,23 +26,44 @@ chrome.runtime.onMessage.addListener(async function (
 
 
 		let selectedWebsites = await request.message3;
-		console.log("selected websites are ",selectedWebsites)
-		
-		console.log(" type of starting point ", typeof startingPoint);
 
+		// selectedWebsites.map((website) => {
+		// 	console.log("website is ", website);
+		// });
+		
+
+		// if (
+		// 	totalSolved < startingPoint + 1 &&
+		// 	location.hostname != "leetcode.com" &&
+		// 	location.hostname != "chatgpt.com" &&
+		// 	location.hostname != "www.codehelp.in" &&
+		// 	location.hostname != "learn.codehelp.in" &&
+		// 	// location.hostname != "www.google.com" &&
+		// 	location.hostname != "takeuforward.org" &&
+		// 	location.hostname != "www.geeksforgeeks.org"
+		// ) {
+		// 	sendResponse({ message: "close tab" });
+		// 	console.log("closing tab msg send");
+		// }
+
+		function isAllowedHostname(hostname) {
+			return selectedWebsites.some((domain) => {
+				return hostname === domain || hostname.endsWith("." + domain);
+			});
+		}
+
+		// Main logic
 		if (
 			totalSolved < startingPoint + 1 &&
-			location.hostname != "leetcode.com" &&
-			location.hostname != "chatgpt.com" &&
-			location.hostname != "www.codehelp.in" &&
-			location.hostname != "learn.codehelp.in" &&
-			// location.hostname != "www.google.com" &&
-			location.hostname != "takeuforward.org" &&
-			location.hostname != "www.geeksforgeeks.org"
+			!isAllowedHostname(location.hostname)
 		) {
 			sendResponse({ message: "close tab" });
 			console.log("closing tab msg send");
 		}
+
+
+
+
 
 		console.log("hui exexute");
 	}
